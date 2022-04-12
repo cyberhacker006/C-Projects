@@ -1,2 +1,2 @@
 # C-Projects
-This repository contains my C# projects.
+This project is a checker game that player can play with a computer algorithm.
