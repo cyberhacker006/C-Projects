@@ -15,12 +15,8 @@ namespace CHECKERSCRYPTO
                                                  { ".", ".", ".", ".", ".", "x", "x", "x" },
                                                  { ".", ".", ".", ".", ".", "x", "x", "x" } };
             int[] jxo = new int[18] { 0, 0, 0, 1, 1, 1, 2, 2, 2, 5, 5, 5, 6, 6, 6, 7, 7, 7 };
-            //ixo : i for x and o pieces
             int[] ixo = new int[18] { 0, 1, 2, 0, 1, 2, 0, 1, 2, 5, 6, 7, 5, 6, 7, 5, 6, 7 };
-            //jxo : j for x and o pieces
-            //represent exact location of all 18 "x" an "o" 
-            //string[] gameplay = new string[72001];
-            //int temp = 0;
+            
             int turn = 1;
             bool wincontrol = false;
             bool oturn = false;
