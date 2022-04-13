@@ -1,338 +1,2147 @@
-﻿using System;
+using System;
+using System.Threading;
 
-namespace Word_World3
+namespace _29._11._21_minimalize
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int word_firstletter = 0; // used to compare pattern and text first letters in every word
-            int lastloop = 0; // used for forth loop to compare and finding strings words and loop restrictions
-            int middleloop = 0; // used for second and third loop to compare and finding strings words and loop restrictions
-            int counter = 0;  // used for determine how many letters will be printed in the third loop
-            int control1 = 0; // used for controls
-            int control2 = 0; // used for controls
-            int counter2 = 1; // this counter  helps to restric and determining loop in the fouth loop
-            int value = 0; // this value helps to getting last letter in the word for last loop
-            while (true) // used for turn begginning in every warning 
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.SetCursorPosition(50, 2);
+            Console.WriteLine("_______DEU GAME______");
+            Console.SetCursorPosition(20, 5);
+            Console.WriteLine("1 : PLAY");
+            Console.SetCursorPosition(20, 6);
+            Console.WriteLine("2 : EXIT");
+            Console.Write(" ");
+            int number = 3;
+            try
             {
-                bool flag = true;
-                Console.Write("Please enter a text : ");
-                string text = Console.ReadLine();
-                Console.Write("Please enter the pattern : ");
-                string pattern = Console.ReadLine();
-                text = text.Replace(",", ""); // erasing punctiontonal word in the text
-                text = text.Replace(".", "");
-                string[] wordlist = text.Split(' '); // it is used for if the user enter only '*' in the pattern
-                string upper_text = text.ToUpper(); // this is for compering pattern and text correctly
-                string upper_pattern = pattern.ToUpper(); // this is for compering pattern and text correctly
-                string[] your_text = new string[upper_text.Length]; // it is used for if the word correct and fit in all conditions the word will be put inside this variable and it will be printed
-                upper_text = upper_text.Replace("I", "İ");// editing string characters 
-                upper_pattern = upper_pattern.Replace("I", "İ");
-                if (text.Length == 0) // controling part for text
+                number = Convert.ToInt32(Console.ReadLine());
+            }
+            catch
+            {
+                Console.WriteLine("That choice is not in menu");
+                Console.WriteLine("Please press any button to close the game");
+                Console.ReadKey();
+            }
+            Console.ResetColor();
+            Console.Clear();
+            if (number == 1)
+            {
+                ConsoleKeyInfo cki;
+                int cursorx = 6, cursory = 3;   // position of cursor               
+                int ax = 13, ay = 20;    // delete X
+                int adir = 1;            // direction of A:   1:rigth   -1:left
+                int a = 0, b = 6;  //b: Setting the deletion cursor of 0s   //a: helping the keeping the values.
+                int i1 = 0; // count numbers
+                int column; //decide number where exist in each row
+                int i9 = 1; // writing first screen numbers
+                int i2 = 0;  // erasing the same numbers side by side in loops
+                int counter = 0; //count the first screen numbers
+                int score = 0;  //Player Score
+                bool checking = false;
+                // --- Static screen parts
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.SetCursorPosition(5, 2);
+                Console.WriteLine("+------------------------------+");
+                for (int i = 0; i <= 2; i++)
                 {
-                    Console.WriteLine("Please enter a text.");
-                    Console.ReadKey();
-                    Console.Clear();
-                    flag = false;
+                    Console.SetCursorPosition(5, 3 + i);
+                    Console.WriteLine("|                              |");
                 }
-                else if (pattern.Length == 0)// controling part for pattern
+                Console.SetCursorPosition(5, 6);
+                Console.WriteLine("+------------------------------+");
+                Console.ResetColor();
+                // --- Main game loop
+                int choose = 0, num = 0;
+                int x = 6;
+                int y = 3;
+                int[] line1 = new int[30];
+                int[] line2 = new int[30];
+                int[] line3 = new int[30];
+                while (i1 <= 29) //Desing the numbers
                 {
-                    Console.WriteLine("Please enter a pattern.");
-                    Console.ReadKey();
-                    Console.Clear();
-                    flag = false;
-                }
-                for (int i = 0; i < text.Length; i++) // this control erase one space if comes on after another
-                {
-                    if (text[i] == ' ' && text[i + 1] == ' ')
+                    Random random = new Random();
+                    num = random.Next(1, 4);
+                    column = random.Next(0, 30);
+                    choose = random.Next(1, 4);
+                    if (choose == 1)
                     {
-                        text = text.Remove(i, 1);
-                        upper_text = upper_text.Remove(i, 1);
-                    }
-                    if (text[i] == 'a' || text[i] == 'A' || text[i] == 'B' || text[i] == 'b' || text[i] == 'C' || text[i] == 'c' || text[i] == 'D' || text[i] == 'T' || text[i] == 't'
-                        || text[i] == 'd' || text[i] == 'E' || text[i] == 'e' || text[i] == 'F' || text[i] == 'f' || text[i] == 'G' || text[i] == 'g' || text[i] == 'H'
-                         || text[i] == 'h' || text[i] == 'I' || text[i] == 'i' || text[i] == 'J' || text[i] == 'j' || text[i] == 'K' || text[i] == 'k' || text[i] == 'L'
-                         || text[i] == 'l' || text[i] == 'M' || text[i] == 'm' || text[i] == 'N' || text[i] == 'n' || text[i] == 'O' || text[i] == 'o' || text[i] == 'P'
-                         || text[i] == 'p' || text[i] == 'Q' || text[i] == 'q' || text[i] == 'R' || text[i] == 'r' || text[i] == 'S' || text[i] == 's' || text[i] == 'U'
-                          || text[i] == 'u' || text[i] == 'V' || text[i] == 'v' || text[i] == 'W' || text[i] == 'w' || text[i] == 'X' || text[i] == 'x' || text[i] == 'Y'
-                          || text[i] == 'y' || text[i] == 'Z' || text[i] == 'z' || text[i] == ',' || text[i] == '.' || text[i] == ' ')
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Please enter only english characters and '.' or ','.");
-                        Console.ReadKey();
-                        Console.Clear();
-                        flag = false;
-                        break;
-                    }
-                }
-                for (int i = 0; i < pattern.Length; i++) // controling part for using punctuational words
-                {
-                    if (pattern[i] == 'a' || pattern[i] == 'A' || pattern[i] == 'B' || pattern[i] == 'b' || pattern[i] == 'C' || pattern[i] == 'c' || pattern[i] == 'D' || text[i] == 'T' || text[i] == 't'
-                        || pattern[i] == 'd' || pattern[i] == 'E' || pattern[i] == 'e' || pattern[i] == 'F' || pattern[i] == 'f' || pattern[i] == 'G' || pattern[i] == 'g' || pattern[i] == 'H'
-                         || pattern[i] == 'h' || pattern[i] == 'I' || pattern[i] == 'i' || pattern[i] == 'J' || pattern[i] == 'j' || pattern[i] == 'K' || pattern[i] == 'k' || pattern[i] == 'L'
-                         || pattern[i] == 'l' || pattern[i] == 'M' || pattern[i] == 'm' || pattern[i] == 'N' || pattern[i] == 'n' || pattern[i] == 'O' || pattern[i] == 'o' || pattern[i] == 'P'
-                         || pattern[i] == 'p' || pattern[i] == 'Q' || pattern[i] == 'q' || pattern[i] == 'R' || pattern[i] == 'r' || pattern[i] == 'S' || pattern[i] == 's' || pattern[i] == 'U'
-                          || pattern[i] == 'u' || pattern[i] == 'V' || pattern[i] == 'v' || pattern[i] == 'W' || pattern[i] == 'w' || pattern[i] == 'X' || pattern[i] == 'x' || pattern[i] == 'Y'
-                          || pattern[i] == 'y' || pattern[i] == 'Z' || pattern[i] == 'z' || pattern[i] == '*' || pattern[i] == '-')
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Please enter only english characters and '*' or '-'.");
-                        Console.ReadKey();
-                        Console.Clear();
-                        flag = false;
-                        break;
-                    }
-                    if (pattern[i] == '*')
-                    {
-                        control1 += 1;
-                    }
-                    else if (pattern[i] == '-')
-                    {
-                        control2 += 1;
-                    }
-                    if (control1 != 0 && control2 != 0)
-                    {
-                        Console.WriteLine("Please enter only one type punctuational word '-' or '*'.");
-                        Console.ReadKey();
-                        Console.Clear();
-                        flag = false;
-                        break;
-                    }
-                }
-                while (flag) 
-                {
-                    for (int i = 0; i < upper_text.Length; i++) // this loop for '-' 
-                    {
-                        if (upper_text[i] == ' ') // when the loop comes space it start to control word one by one
+                        if (line1[column] == 0)
                         {
-                            for (int p = 0; p < upper_pattern.Length; p++) // restriction loop with pattern lenght
-                            {
-                                if (upper_pattern[p] == '-') // when the loop fing a '-' it get letters in the index which we come
-                                {
-                                    your_text[p] = Convert.ToString(text[i + 1 + p]);
-                                }
-                                else if (upper_pattern[p] != '-' && upper_pattern[p] == upper_text[i + 1 + p]) // when the loop don't find '-' compares the pattern and text letters if it is same we will add the letter in a variable
-                                {
-                                    your_text[p] = Convert.ToString(text[i + 1 + p]);
-                                }
-                                else if (upper_pattern[p] != '-' && upper_pattern[p] != upper_text[i + 1 + p]) // when the loop don't find '-' compares the pattern and text letters if it is not same the loop will be ended
-                                {
-                                    break;
-                                }
-                                if (p == upper_pattern.Length - 1 && upper_text[i + 2 + p] != ' ') // when the pattern completed but if the text not complete loop will be ended and the word changes 
-                                {
-                                    break;
-                                }
-                                else if (p != upper_pattern.Length - 1 && upper_text[i + 2 + p] == ' ') // if the word changes while the pattern is not complete the loop will be ended and the word changes
-                                {
-                                    break;
-                                }
-                                if (upper_text[i + p + 2] == ' ') // if the all stuations are correct the word will be print
-                                {
-                                    Console.WriteLine();
-                                    for (int i2 = 0; i2 < your_text.Length; i2++)
-                                    {
-                                        Console.Write(your_text[i2]);
-                                    }
-                                    break;
-                                }
-                            }
+                            line1[column] = num;
+                            i1++;
                         }
                     }
-
-                    for (int i = 0; i < upper_text.Length; i++) // this loop for '*' if the '*' is only at the end or in the beginning of the pattern
+                    if (choose == 2)
                     {
-                        middleloop = 0;
-                        if (upper_text[i] == ' ') // when the loop comes space it start to control word one by one
+                        if (line2[column] == 0)
                         {
-                            while (middleloop < upper_pattern.Length) // restriction loop with pattern lenght
+                            line2[column] = num;
+                            i1++;
+                        }
+                    }
+                    if (choose == 3)
+                    {
+                        if (line3[column] == 0)
+                        {
+                            line3[column] = num;
+                            i1++;
+                        }
+                    }
+                }
+                Console.SetCursorPosition(6, 3); // Printing the numbers
+                for (int j = 0; j < 30; j++)
+                {
+                    Console.Write(line1[j]);
+                }
+                Console.WriteLine();
+                Console.SetCursorPosition(6, 4);
+                for (int j = 0; j < 30; j++)
+                {
+                    Console.Write(line2[j]);
+                }
+                Console.WriteLine();
+                Console.SetCursorPosition(6, 5);
+                for (int j = 0; j < 30; j++)
+                {
+                    Console.Write(line3[j]);
+                }
+                for (int l = 0; l < 30; l++)   //delete zeros
+                {
+                    if (line1[l] == 0)
+                    {
+                        Console.SetCursorPosition(b, 3);
+                        Console.Write(" ");
+                    }
+                    if (line2[l] == 0)
+                    {
+                        Console.SetCursorPosition(b, 4);
+                        Console.Write(" ");
+                    }
+                    if (line3[l] == 0)
+                    {
+                        Console.SetCursorPosition(b, 5);
+                        Console.Write(" ");
+                    }
+                    b = b + 1;
+                }
+                while (true)
+                {
+
+                    if (Console.KeyAvailable)
+                    {       // true: there is a key in keyboard buffer
+                        cki = Console.ReadKey(true);       // true: do not write character 
+
+                        if (cki.Key == ConsoleKey.RightArrow && cursorx < 35)
+                        {   // key and boundary control
+                            Console.SetCursorPosition(cursorx, cursory);
+                            Console.WriteLine(" ");
+                            cursorx += 1;
+                        }
+                        if (cki.Key == ConsoleKey.LeftArrow && cursorx > 6)
+                        {
+                            Console.SetCursorPosition(cursorx, cursory);
+                            Console.WriteLine(" ");
+                            cursorx -= 1;
+                        }
+                        if (cki.Key == ConsoleKey.UpArrow && cursory > 3)
+                        {
+                            Console.SetCursorPosition(cursorx, cursory);
+                            Console.WriteLine(" ");
+                            cursory--;
+                        }
+                        if (cki.Key == ConsoleKey.DownArrow && cursory < 5)
+                        {
+                            Console.SetCursorPosition(cursorx, cursory);
+                            Console.WriteLine(" ");
+                            cursory++;
+                        }
+                        if (cursorx > 6 && cursorx < 35) // W/A/S/D Movement
+                        {
+                            if (line1[cursorx - 5] == 0 && line1[cursorx - 7] == 0)
                             {
-                                if (upper_pattern[middleloop] == '*' && upper_pattern.Length == 1) // when the loop fing a '*' it get letters in the index which we come if '*' is the only character of the pattern
+                                if (cki.Key == ConsoleKey.S)
                                 {
-                                    Console.WriteLine();
-                                    for (int i2 = 0; i2 < wordlist.Length; i2++)
+                                    if (line1[(cursorx - 6)] != 0 && line2[(cursorx - 6)] == 0)
                                     {
-                                        Console.WriteLine(wordlist[i2]);
-                                    }
-                                    return;
-                                }
-                                else if (upper_pattern[middleloop] != '*' && upper_pattern[middleloop] == upper_text[i + 1 + middleloop]) // when the loop don't find '*' compares the pattern and text letters if it is same we will add the letter in a variable
-                                {
-                                    wordlist[middleloop] = Convert.ToString(text[i + 1 + middleloop]);
-                                    middleloop++;
-                                }
-                                else if (upper_pattern[middleloop] == '*' && upper_pattern.Length - 1 == upper_pattern.IndexOf('*')) // when the loop fing a '*' it get letters in the index which if the '*' exist at the beginning or end
-                                {
-                                    for (int i2 = middleloop; i2 < upper_text.Length - (i + 1 + i2); i2++) // when the loop fing a '*' it get letters in the index which after '*' or before
-                                    {
-                                        if (upper_text[i + 1 + i2 - middleloop] == ' ')
+                                        if (line1[(cursorx - 6)] == 1)
                                         {
-                                            if (upper_pattern[middleloop] != '*')
+                                            if (cursory == 3)
                                             {
-                                                for (int iz = 0; iz < upper_pattern.Length - 1; iz++)
-                                                {
-                                                    your_text[middleloop] = Convert.ToString(text[i + 1 + middleloop]);
-                                                }
+                                                line1[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 1;
                                             }
-                                            your_text[i2] = Convert.ToString(text[i + i2 - middleloop]);
-                                            Console.WriteLine();
-                                            for (int ic = 0; ic < upper_text.Length; ic++)
-                                            {
-                                                Console.Write(your_text[ic]);
-                                            }
-                                            middleloop++;
-                                            break;
+
                                         }
-                                        your_text[i2] = Convert.ToString(text[i + i2 - middleloop]);
-                                    }
-                                }
-                                else if (upper_pattern[middleloop] != '*' && upper_pattern[middleloop] != upper_text[i + 1 + middleloop])// when the loop don't find '*' compares the pattern and text letters if it is not same the loop will be ended
-                                {
-                                    break;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                                if (upper_text[i + middleloop + 2] == ' ') // if the all conditions correct at the end of the word the variable will be printed
-                                {
-                                    Console.WriteLine();
-                                    for (int i2 = 0; i2 < upper_text.Length; i2++)
-                                    {
-                                        Console.Write(your_text[i2]);
-                                    }
-
-                                    break;
-                                }
-                            }
-                        }
-                        for (int ix = 0; ix < upper_text.Length; ix++) // when the loop ends the variable have to be empty for another word
-                        {
-                            your_text[ix] = " ";
-                        }
-                    }
-
-                    for (int i = 0; i < upper_text.Length; i++)  // this loop for '*' if the '*' is in the middle of the pattern
-                    {
-                        middleloop = 0;
-                        if (upper_text[i] == ' ') // when the loop comes space it start to control word one by one
-                        {
-                            if (upper_pattern.Length != 1 && upper_pattern[0] == '*') // when the loop fing a '*' it get letters in the index which after '*' or before
-                            {
-                                for (int ip = 0; ip < upper_text.Length; ip++)
-                                {
-                                    if ((i + 1 + ip) >= upper_text.Length)
-                                    {
-                                        break;
-                                    }
-                                    if (upper_text[i + 1 + ip] == ' ')
-                                    {
-                                        middleloop++;
-                                        for (int o = 1; o <= pattern.Length - 1; o++) // this loop for controling each letter on the word
+                                        else if (line1[(cursorx - 6)] == 2)
                                         {
-                                            if (upper_pattern[upper_pattern.Length - o] == upper_text[i + ip - o + 1])
+                                            if (cursory == 3)
                                             {
-                                                counter2++;
-                                                if (o == pattern.Length - 1 && counter2 == pattern.Length) // if the all condoitions are true the wprd will be prrinted
+                                                line1[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                line1[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 3;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.D)
+                                {
+                                    if (line1[(cursorx - 6)] != 0)
+                                    {
+                                        if (line1[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
                                                 {
-                                                    Console.WriteLine();
-                                                    for (int ic = 0; ic < counter; ic++)
+                                                    if (line1[i + 1] == 0)
                                                     {
-                                                        Console.Write(your_text[ic]);
+                                                        if (line1[i] == 1)
+                                                        {
+                                                            line1[i + 1] = 1;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
                                                     }
                                                 }
                                             }
-                                            else if (upper_pattern[upper_pattern.Length - o] != upper_text[i + ip - o + 1])
-                                            {
-                                                counter2 = 1;
-                                                break;
-                                            }
                                         }
-                                        break;
-                                    }
-                                    counter++;
-                                    your_text[ip] = Convert.ToString(text[i + ip + 1]);
-                                }
-                            }
-                            else if (middleloop != upper_pattern.Length - 1 && upper_text[i + 2 + middleloop] == ' ') // when the pattern not finished and if the word finished the loop will be ended
-                            {
-                                break;
-                            }
-                        }
-                        for (int ix = 0; ix < upper_text.Length; ix++) // when the loop ends the variable have to be empty for another word
-                        {
-                            your_text[ix] = " ";
-                        }
-                    }
-
-                    for (int i = 0; i < upper_text.Length; i++) // this loop for '*' if the '*' is in the middle of the pattern and more than one times
-                    {
-                        if (upper_text[i] != ' ') // when the loop comes space it start to control word one by one
-                        {
-                            for (int ie = word_firstletter; ie < upper_text.Length; ie++) // the first letter will be updates here for every word
-                            {
-                                if (upper_text[ie] == ' ') // in each space the first letter updateds for the future loop 
-                                {
-                                    word_firstletter = ie + 1;
-                                    break;
-                                }
-                            }
-                        }
-                        lastloop = 0;
-                        while (lastloop < upper_pattern.Length) // last loop used for loop restriction
-                        {
-                            if (upper_pattern[lastloop] != '*' && upper_pattern[lastloop] != upper_text[word_firstletter + lastloop]) //when the loop don't find '*' compares the pattern and text letters if it is not same the loop will be ended
-                            {
-                                break;
-                            }
-                            if (upper_pattern[lastloop] == '*')
-                            {
-                                for (int it = lastloop; it < upper_text.Length; it++)
-                                {
-                                    if ((lastloop + 1) >= upper_pattern.Length || it >= upper_text.Length || word_firstletter >= upper_text.Length) // if the word outside of the bounds this part will be skiped
-                                    {
-                                        break;
-                                    }
-                                    if (upper_pattern[lastloop + 1] == upper_text[it] && upper_pattern[0] == upper_text[word_firstletter]) // controling the pattern and text letters if the letters are same the loop is going to print the word
-                                    {
-                                        for (int iz = word_firstletter; iz < 1000; iz++) // ı used this loop for controling letters
+                                        else if (line1[(cursorx - 6)] == 2)
                                         {
-                                            if (upper_text[iz] == ' ')
+                                            if (cursory == 3)
                                             {
-                                                value = iz; // ı used value to get last letter of words 
-                                                break;
-                                            }
-                                        }
-                                        if (upper_pattern[upper_pattern.Length - 1] == upper_text[value - 1]) // controling the last letter in the word
-                                        {
-                                            Console.WriteLine();
-                                            for (int iz = word_firstletter; iz < 1000; iz++)
-                                            {
-                                                Console.Write(text[iz]);
-                                                if (upper_text[iz] == ' ')
+                                                for (int i = (cursorx - 6); i <= 28; i++)
                                                 {
-                                                    break;
+                                                    if (line1[i + 1] == 0)
+                                                    {
+                                                        if (line1[i] == 2)
+                                                        {
+                                                            line1[i + 1] = 2;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
                                                 }
                                             }
-                                            break;
+                                        }
+                                        else if (line1[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line1[i + 1] == 0)
+                                                    {
+                                                        if (line1[i] == 3)
+                                                        {
+                                                            line1[i + 1] = 3;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.A)
+                                {
+                                    if (line1[(cursorx - 6)] != 0)
+                                    {
+                                        if (line1[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line1[i - 1] == 0)
+                                                    {
+                                                        if (line1[i] == 1)
+                                                        {
+                                                            line1[i - 1] = 1;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line1[i - 1] == 0)
+                                                    {
+                                                        if (line1[i] == 2)
+                                                        {
+                                                            line1[i - 1] = 2;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line1[i - 1] == 0)
+                                                    {
+                                                        if (line1[i] == 3)
+                                                        {
+                                                            line1[i - 1] = 3;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
-                            lastloop++;
+                        }
+                        else if (cursorx == 6)
+                        {
+                            if (line1[cursorx - 5] == 0)
+                            {
+                                if (cki.Key == ConsoleKey.S)
+                                {
+                                    if (line1[(cursorx - 6)] != 0 && line2[(cursorx - 6)] == 0)
+                                    {
+                                        if (line1[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                line1[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 1;
+                                            }
+
+                                        }
+                                        else if (line1[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                line1[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                line1[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 3;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.D)
+                                {
+                                    if (line1[(cursorx - 6)] != 0)
+                                    {
+                                        if (line1[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line1[i + 1] == 0)
+                                                    {
+                                                        if (line1[i] == 1)
+                                                        {
+                                                            line1[i + 1] = 1;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line1[i + 1] == 0)
+                                                    {
+                                                        if (line1[i] == 2)
+                                                        {
+                                                            line1[i + 1] = 2;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line1[i + 1] == 0)
+                                                    {
+                                                        if (line1[i] == 3)
+                                                        {
+                                                            line1[i + 1] = 3;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.A)
+                                {
+                                    if (line1[(cursorx - 6)] != 0)
+                                    {
+                                        if (line1[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line1[i - 1] == 0)
+                                                    {
+                                                        if (line1[i] == 1)
+                                                        {
+                                                            line1[i - 1] = 1;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line1[i - 1] == 0)
+                                                    {
+                                                        if (line1[i] == 2)
+                                                        {
+                                                            line1[i - 1] = 2;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line1[i - 1] == 0)
+                                                    {
+                                                        if (line1[i] == 3)
+                                                        {
+                                                            line1[i - 1] = 3;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (cursorx == 35)
+                        {
+                            if (line1[cursorx - 7] == 0)
+                            {
+                                if (cki.Key == ConsoleKey.S)
+                                {
+                                    if (line1[(cursorx - 6)] != 0 && line2[(cursorx - 6)] == 0)
+                                    {
+                                        if (line1[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                line1[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 1;
+                                            }
+
+                                        }
+                                        else if (line1[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                line1[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                line1[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 3;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.D)
+                                {
+                                    if (line1[(cursorx - 6)] != 0)
+                                    {
+                                        if (line1[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line1[i + 1] == 0)
+                                                    {
+                                                        if (line1[i] == 1)
+                                                        {
+                                                            line1[i + 1] = 1;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line1[i + 1] == 0)
+                                                    {
+                                                        if (line1[i] == 2)
+                                                        {
+                                                            line1[i + 1] = 2;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line1[i + 1] == 0)
+                                                    {
+                                                        if (line1[i] == 3)
+                                                        {
+                                                            line1[i + 1] = 3;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.A)
+                                {
+                                    if (line1[(cursorx - 6)] != 0)
+                                    {
+                                        if (line1[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line1[i - 1] == 0)
+                                                    {
+                                                        if (line1[i] == 1)
+                                                        {
+                                                            line1[i - 1] = 1;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line1[i - 1] == 0)
+                                                    {
+                                                        if (line1[i] == 2)
+                                                        {
+                                                            line1[i - 1] = 2;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line1[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 3)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line1[i - 1] == 0)
+                                                    {
+                                                        if (line1[i] == 3)
+                                                        {
+                                                            line1[i - 1] = 3;
+                                                            line1[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //
+                        if (cursorx < 35 && cursorx > 6)
+                        {
+                            if (line2[(cursorx - 7)] == 0 && line2[(cursorx - 5)] == 0)
+                            {
+                                if (cki.Key == ConsoleKey.W)
+                                {
+                                    if (line2[(cursorx - 6)] != 0 && line1[(cursorx - 6)] == 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line1[(cursorx - 6)] = 1;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line1[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line1[(cursorx - 6)] = 3;
+                                            }
+
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.S)
+                                {
+                                    if (line2[(cursorx - 6)] != 0 && line3[(cursorx - 6)] == 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line3[(cursorx - 6)] = 1;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line3[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line3[(cursorx - 6)] = 3;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.D)
+                                {
+                                    if (line2[(cursorx - 6)] != 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line2[i + 1] == 0)
+                                                    {
+                                                        if (line2[i] == 1)
+                                                        {
+                                                            line2[i + 1] = 1;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line2[i + 1] == 0)
+                                                    {
+                                                        if (line2[i] == 2)
+                                                        {
+                                                            line2[i + 1] = 2;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line2[i + 1] == 0)
+                                                    {
+                                                        if (line2[i] == 3)
+                                                        {
+                                                            line2[i + 1] = 3;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.A)
+                                {
+                                    if (line2[(cursorx - 6)] != 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line2[i - 1] == 0)
+                                                    {
+                                                        if (line2[i] == 1)
+                                                        {
+                                                            line2[i - 1] = 1;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line2[i - 1] == 0)
+                                                    {
+                                                        if (line2[i] == 2)
+                                                        {
+                                                            line2[i - 1] = 2;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line2[i - 1] == 0)
+                                                    {
+                                                        if (line2[i] == 3)
+                                                        {
+                                                            line2[i - 1] = 3;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                        else if (cursorx == 6)
+                        {
+                            if (line2[(cursorx - 5)] == 0)
+                            {
+                                if (cki.Key == ConsoleKey.W) // movement with w/s keys
+                                {
+                                    if (line2[(cursorx - 6)] != 0 && line1[(cursorx - 6)] == 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line1[(cursorx - 6)] = 1;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line1[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line1[(cursorx - 6)] = 3;
+                                            }
+
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.S)
+                                {
+                                    if (line2[(cursorx - 6)] != 0 && line3[(cursorx - 6)] == 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line3[(cursorx - 6)] = 1;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line3[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line3[(cursorx - 6)] = 3;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.D)
+                                {
+                                    if (line2[(cursorx - 6)] != 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line2[i + 1] == 0)
+                                                    {
+                                                        if (line2[i] == 1)
+                                                        {
+                                                            line2[i + 1] = 1;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line2[i + 1] == 0)
+                                                    {
+                                                        if (line2[i] == 2)
+                                                        {
+                                                            line2[i + 1] = 2;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line2[i + 1] == 0)
+                                                    {
+                                                        if (line2[i] == 3)
+                                                        {
+                                                            line2[i + 1] = 3;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.A)
+                                {
+                                    if (line2[(cursorx - 6)] != 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line2[i - 1] == 0)
+                                                    {
+                                                        if (line2[i] == 1)
+                                                        {
+                                                            line2[i - 1] = 1;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line2[i - 1] == 0)
+                                                    {
+                                                        if (line2[i] == 2)
+                                                        {
+                                                            line2[i - 1] = 2;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line2[i - 1] == 0)
+                                                    {
+                                                        if (line2[i] == 3)
+                                                        {
+                                                            line2[i - 1] = 3;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (cursorx == 35)
+                        {
+                            if (line2[(cursorx - 7)] == 0)
+                            {
+                                if (cki.Key == ConsoleKey.W) // movement with w/s keys
+                                {
+                                    if (line2[(cursorx - 6)] != 0 && line1[(cursorx - 6)] == 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line1[(cursorx - 6)] = 1;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line1[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line1[(cursorx - 6)] = 3;
+                                            }
+
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.S)
+                                {
+                                    if (line2[(cursorx - 6)] != 0 && line3[(cursorx - 6)] == 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line3[(cursorx - 6)] = 1;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line3[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                line2[(cursorx - 6)] = 0;
+                                                line3[(cursorx - 6)] = 3;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.D)
+                                {
+                                    if (line2[(cursorx - 6)] != 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line2[i + 1] == 0)
+                                                    {
+                                                        if (line2[i] == 1)
+                                                        {
+                                                            line2[i + 1] = 1;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line2[i + 1] == 0)
+                                                    {
+                                                        if (line2[i] == 2)
+                                                        {
+                                                            line2[i + 1] = 2;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line2[i + 1] == 0)
+                                                    {
+                                                        if (line2[i] == 3)
+                                                        {
+                                                            line2[i + 1] = 3;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.A)
+                                {
+                                    if (line2[(cursorx - 6)] != 0)
+                                    {
+                                        if (line2[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line2[i - 1] == 0)
+                                                    {
+                                                        if (line2[i] == 1)
+                                                        {
+                                                            line2[i - 1] = 1;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line2[i - 1] == 0)
+                                                    {
+                                                        if (line2[i] == 2)
+                                                        {
+                                                            line2[i - 1] = 2;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line2[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 4)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line2[i - 1] == 0)
+                                                    {
+                                                        if (line2[i] == 3)
+                                                        {
+                                                            line2[i - 1] = 3;
+                                                            line2[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (cursorx < 35 && cursorx > 6)
+                        {
+                            if (line3[(cursorx - 7)] == 0 && line3[(cursorx - 5)] == 0)
+                            {
+                                if (cki.Key == ConsoleKey.W)
+                                {
+                                    if (line3[(cursorx - 6)] != 0 && line2[(cursorx - 6)] == 0)
+                                    {
+                                        if (line3[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                line3[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 1;
+                                            }
+
+                                        }
+                                        else if (line3[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                line3[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                line3[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 3;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.D)
+                                {
+                                    if (line3[(cursorx - 6)] != 0)
+                                    {
+                                        if (line3[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line3[i + 1] == 0)
+                                                    {
+                                                        if (line3[i] == 1)
+                                                        {
+                                                            line3[i + 1] = 1;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line3[i + 1] == 0)
+                                                    {
+                                                        if (line3[i] == 2)
+                                                        {
+                                                            line3[i + 1] = 2;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line3[i + 1] == 0)
+                                                    {
+                                                        if (line3[i] == 3)
+                                                        {
+                                                            line3[i + 1] = 3;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.A)
+                                {
+                                    if (line3[(cursorx - 6)] != 0)
+                                    {
+                                        if (line3[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line3[i - 1] == 0)
+                                                    {
+                                                        if (line3[i] == 1)
+                                                        {
+                                                            line3[i - 1] = 1;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line3[i - 1] == 0)
+                                                    {
+                                                        if (line3[i] == 2)
+                                                        {
+                                                            line3[i - 1] = 2;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line3[i - 1] == 0)
+                                                    {
+                                                        if (line3[i] == 3)
+                                                        {
+                                                            line3[i - 1] = 3;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (cursorx == 35)
+                        {
+                            if (line3[(cursorx - 7)] == 0)
+                            {
+                                if (cki.Key == ConsoleKey.W)
+                                {
+                                    if (line3[(cursorx - 6)] != 0 && line2[(cursorx - 6)] == 0)
+                                    {
+                                        if (line3[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                line3[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 1;
+                                            }
+
+                                        }
+                                        else if (line3[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                line3[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                line3[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 3;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.D)
+                                {
+                                    if (line3[(cursorx - 6)] != 0)
+                                    {
+                                        if (line3[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line3[i + 1] == 0)
+                                                    {
+                                                        if (line3[i] == 1)
+                                                        {
+                                                            line3[i + 1] = 1;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line3[i + 1] == 0)
+                                                    {
+                                                        if (line3[i] == 2)
+                                                        {
+                                                            line3[i + 1] = 2;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line3[i + 1] == 0)
+                                                    {
+                                                        if (line3[i] == 3)
+                                                        {
+                                                            line3[i + 1] = 3;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.A)
+                                {
+                                    if (line3[(cursorx - 6)] != 0)
+                                    {
+                                        if (line3[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line3[i - 1] == 0)
+                                                    {
+                                                        if (line3[i] == 1)
+                                                        {
+                                                            line3[i - 1] = 1;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line3[i - 1] == 0)
+                                                    {
+                                                        if (line3[i] == 2)
+                                                        {
+                                                            line3[i - 1] = 2;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line3[i - 1] == 0)
+                                                    {
+                                                        if (line3[i] == 3)
+                                                        {
+                                                            line3[i - 1] = 3;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (cursorx == 6)
+                        {
+                            if (line3[(cursorx - 5)] == 0)
+                            {
+                                if (cki.Key == ConsoleKey.W)
+                                {
+                                    if (line3[(cursorx - 6)] != 0 && line2[(cursorx - 6)] == 0)
+                                    {
+                                        if (line3[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                line3[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 1;
+                                            }
+
+                                        }
+                                        else if (line3[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                line3[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 2;
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                line3[(cursorx - 6)] = 0;
+                                                line2[(cursorx - 6)] = 3;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.D) 
+                                {
+                                    if (line3[(cursorx - 6)] != 0)
+                                    {
+                                        if (line3[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line3[i + 1] == 0)
+                                                    {
+                                                        if (line3[i] == 1)
+                                                        {
+                                                            line3[i + 1] = 1;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line3[i + 1] == 0)
+                                                    {
+                                                        if (line3[i] == 2)
+                                                        {
+                                                            line3[i + 1] = 2;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i <= 28; i++)
+                                                {
+                                                    if (line3[i + 1] == 0)
+                                                    {
+                                                        if (line3[i] == 3)
+                                                        {
+                                                            line3[i + 1] = 3;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (cki.Key == ConsoleKey.A) // controling A function in line 3
+                                {
+                                    if (line3[(cursorx - 6)] != 0)
+                                    {
+                                        if (line3[(cursorx - 6)] == 1)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line3[i - 1] == 0)
+                                                    {
+                                                        if (line3[i] == 1)
+                                                        {
+                                                            line3[i - 1] = 1;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 2)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line3[i - 1] == 0)
+                                                    {
+                                                        if (line3[i] == 2)
+                                                        {
+                                                            line3[i - 1] = 2;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (line3[(cursorx - 6)] == 3)
+                                        {
+                                            if (cursory == 5)
+                                            {
+                                                for (int i = (cursorx - 6); i > 0; i--)
+                                                {
+                                                    if (line3[i - 1] == 0)
+                                                    {
+                                                        if (line3[i] == 3)
+                                                        {
+                                                            line3[i - 1] = 3;
+                                                            line3[i] = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (cki.Key == ConsoleKey.Escape)
+                        {
+                            return;
+                        }
+                        while (i1 <= 29) // Design the numbers
+                        {
+                            Random random = new Random();
+                            num = random.Next(1, 4);
+                            column = random.Next(0, 30);
+                            choose = random.Next(1, 4);
+                            if (choose == 1)
+                            {
+                                if (line1[column] == 0)
+                                {
+                                    line1[column] = num;
+                                    i1++;
+                                }
+                            }
+                            if (choose == 2)
+                            {
+                                if (line2[column] == 0)
+                                {
+                                    line2[column] = num;
+                                    i1++;
+                                }
+                            }
+                            if (choose == 3)
+                            {
+                                if (line3[column] == 0)
+                                {
+                                    line3[column] = num;
+                                    i1++;
+                                }
+                            }
+                        }
+                        Console.SetCursorPosition(6, 3); // Printing the numbers
+                        for (int j = 0; j < 30; j++)
+                            Console.Write(line1[j]);
+                        Console.WriteLine();
+                        Console.SetCursorPosition(6, 4);
+                        for (int j = 0; j < 30; j++)
+                            Console.Write(line2[j]);
+                        Console.WriteLine();
+                        Console.SetCursorPosition(6, 5);
+                        for (int j = 0; j < 30; j++)
+                            Console.Write(line3[j]);
+                    }
+                    if (line1[a] == 1)    // Keeping the Values
+                    {
+                        if (x < 36)
+                        {
+                            Console.SetCursorPosition(x, y);
+                            Console.WriteLine("1");
                         }
                     }
-                    Console.ReadKey();
+                    else if (line1[a] == 2)
+                    {
+                        if (x < 36)
+                        {
+                            Console.SetCursorPosition(x, y);
+                            Console.WriteLine("2");
+                        }
+                    }
+                    else if (line1[a] == 3)
+                    {
+                        if (x < 36)
+                        {
+                            Console.SetCursorPosition(x, y);
+                            Console.WriteLine("3");
+                        }
+                    }
+                    if (line2[a] == 1)
+                    {
+                        if (x < 36)
+                        {
+                            Console.SetCursorPosition(x, y + 1);
+                            Console.WriteLine("1");
+                        }
+                    }
+                    else if (line2[a] == 2)
+                    {
+                        if (x < 36)
+                        {
+                            Console.SetCursorPosition(x, y + 1);
+                            Console.WriteLine("2");
+
+                        }
+                    }
+                    else if (line2[a] == 3)
+                    {
+                        if (x < 36)
+                        {
+                            Console.SetCursorPosition(x, y + 1);
+                            Console.WriteLine("3");
+                        }
+                    }
+                    if (line3[a] == 1)
+                    {
+                        if (x < 36)
+                        {
+                            Console.SetCursorPosition(x, y + 2);
+                            Console.WriteLine("1");
+                        }
+                    }
+                    else if (line3[a] == 2)
+                    {
+                        if (x < 36)
+                        {
+                            Console.SetCursorPosition(x, y + 2);
+                            Console.WriteLine("2");
+
+                        }
+                    }
+                    else if (line3[a] == 3)
+                    {
+                        if (x < 36)
+                        {
+                            Console.SetCursorPosition(x, y + 2);
+                            Console.WriteLine("3");
+                        }
+                    }
+                    x += 1;
+                    a++;
+                    if (x > 35)
+                    {
+                        x = 6;
+                    }
+                    if (a > 29)
+                    {
+                        a = 0;
+                    }
+                    for (int i = 0; i < 29; i++)  //destroying the same numbers next to each other
+                    {
+                        if (line1[i] != 0 && line1[i + 1] != 0)
+                        {
+                            if (line1[i] == line1[i + 1])
+                            {
+                                line1[i] = 0;
+                                line1[i + 1] = 0;
+                                checking = true;
+                                counter++;
+                            }
+                        }
+                        if (line2[i] != 0 && line2[i + 1] != 0)
+                        {
+                            if (line2[i] == line2[i + 1])
+                            {
+                                line2[i] = 0;
+                                line2[i + 1] = 0;
+                                checking = true;
+                                counter++;
+                            }
+                        }
+                        if (line3[i] != 0 && line3[i + 1] != 0)
+                        {
+                            if (line3[i] == line3[i + 1])
+                            {
+                                line3[i] = 0;
+                                line3[i + 1] = 0;
+                                checking = true;
+                                counter++;
+                            }
+                        }
+                    }
+                    while (2 * counter - 1 > i9)  //setting 30 number in first screen
+                    {
+                        Random random = new Random();
+                        num = random.Next(1, 4);
+                        column = random.Next(0, 30);
+                        choose = random.Next(1, 4);
+                        if (choose == 1)
+                        {
+                            if (line1[column] == 0)
+                            {
+                                line1[column] = num;
+                                i9++;
+                                Console.SetCursorPosition(column + 6, 3);
+                                Console.WriteLine(num);
+                                score += 10;
+                            }
+                        }
+                        else if (choose == 2)
+                        {
+                            if (line2[column] == 0)
+                            {
+                                line2[column] = num;
+                                i9++;
+                                Console.SetCursorPosition(column + 6, 4);
+                                Console.WriteLine(num);
+                                score += 10;
+                            }
+                        }
+                        else if (choose == 3)
+                        {
+                            if (line3[column] == 0)
+                            {
+                                line3[column] = num;
+                                i9++;
+                                Console.SetCursorPosition(column + 6, 5);
+                                Console.WriteLine(num);
+                                score += 10;
+                            }
+                        }
+                    }
+                    i9 = 999999999;
+                    while (checking && i2 < 2)// if the same numbers come together they will be erased and placed two new number
+                    {
+                        Random random = new Random();
+                        num = random.Next(1, 4);
+                        column = random.Next(0, 30);
+                        choose = random.Next(1, 4);
+                        if (choose == 1)
+                        {
+                            if (line1[column] == 0)
+                            {
+                                line1[column] = num;
+                                i2++;
+                                Console.SetCursorPosition(column + 6, 3);
+                                Console.WriteLine(num);
+                                score += 10;
+                            }
+                        }
+                        else if (choose == 2)
+                        {
+                            if (line2[column] == 0)
+                            {
+                                line2[column] = num;
+                                i2++;
+                                Console.SetCursorPosition(column + 6, 4);
+                                Console.WriteLine(num);
+                                score += 10;
+                            }
+                        }
+                        else if (choose == 3)
+                        {
+                            if (line3[column] == 0)
+                            {
+                                line3[column] = num;
+                                i2++;
+                                Console.SetCursorPosition(column + 6, 5);
+                                Console.WriteLine(num);
+                                score += 10;
+                            }
+                        }
+                    }
+                    int b3 = 6;
+                    for (int l = 0; l < 30; l++)   //delete zeros
+                    {
+                        if (line1[l] == 0)
+                        {
+                            Console.SetCursorPosition(b3, 3);
+                            Console.Write(" ");
+                        }
+                        if (line2[l] == 0)
+                        {
+                            Console.SetCursorPosition(b3, 4);
+                            Console.Write(" ");
+                        }
+                        if (line3[l] == 0)
+                        {
+                            Console.SetCursorPosition(b3, 5);
+                            Console.Write(" ");
+                        }
+                        b3 = b3 + 1;
+                    }
+                    if (i2 >= 2)
+                    {
+                        i2 = 0;
+                    }
+                    checking = false;
+                    Console.ForegroundColor = ConsoleColor.Blue; // this is for menu
+                    Console.SetCursorPosition(53, 2);
+                    Console.WriteLine("----------------------------------------");
+                    Console.SetCursorPosition(53, 13);
+                    Console.WriteLine("----------------------------------------");
+                    for (int i = 3; i < 13; i++)
+                    {
+                        Console.SetCursorPosition(53, i);
+                        Console.WriteLine("|                                      |");
+                    }
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.SetCursorPosition(65, 4);
+                    Console.WriteLine("Score is : " + score);
+                    Console.ResetColor();
+
+                    if (adir == 1 && ax >= 60) adir = -1;    // change direction at boundaries
+                    if (adir == -1 && ax <= 5) adir = 1;
+                    Console.SetCursorPosition(ax, ay);    // delete old X
+                    Console.WriteLine(" ");
+                    ax = ax + adir; // updating the cursor place
+                    Console.SetCursorPosition(cursorx, cursory);    // refresh X (current position)
+                    Console.WriteLine("X");
+                    Thread.Sleep(1);     // sleep 1 ms
+                    if (score >= 1000) // Controling the score 
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.SetCursorPosition(55, 8);
+                        Console.WriteLine("GAME IS OVER !!");
+                        Console.SetCursorPosition(55, 9);
+                        Console.WriteLine("You reached 1000 score and more.");
+                        Console.SetCursorPosition(55, 10);
+                        Console.WriteLine("Please press enter to close the game.");
+                        Console.ResetColor();
+                        Console.ReadLine();
+                        break;
+                    }
                 }
-                
+            }
+            else if (number == 2) // in the bginning of the game if the player choose 2 the game will be ended
+            {
+                Console.SetCursorPosition(10, 25);
+                Console.WriteLine("EXIT");
             }
         }
     }
 }
+
+
